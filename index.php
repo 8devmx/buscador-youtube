@@ -44,15 +44,23 @@
       ?>
     </ul>
   </div>
+  <div id="selectedAllWrapper">
+    <span>
+      <input type="checkbox" name="selectedAll" id="selectedAll" /> Seleccionar todo
+    </span>
+    <a href="#" id="deleteItem">Borrar</a>
+  </div>
   <div id="results">
     <?php
     $items = "";
     while ($row = mysqli_fetch_array($result)) {
+      $id = $row['id'];
       $nombre = $row['nombre'];
       $correo = $row['correo'];
       $telefono = $row['telefono'];
       $items .= "
         <div class='item'>
+        <input type='checkbox' value= '$id' class='itemSelected' />
           <h2>$nombre</h2>
           <h3>$correo</h3>
           <p>$telefono</p>
@@ -62,6 +70,7 @@
     echo $items;
     ?>
   </div>
+  <script src="js/index.js"></script>
 </body>
 
 </html>

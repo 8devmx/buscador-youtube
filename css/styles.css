@@ -46,6 +46,7 @@
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  position: relative;
 }
 
 .item:hover {
@@ -79,4 +80,20 @@
 #pagination ul a:hover {
   background: #535353;
   color: #fff;
+}
+
+#selectedAllWrapper {
+  width: 90%;
+  margin: 10px auto;
+}
+
+.itemSelected {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+#deleteItem {
+  display: none;
 }

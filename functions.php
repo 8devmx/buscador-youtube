@@ -1,4 +1,30 @@
 <?php
+if (isset($_POST)) {
+  switch ($_POST['function']) {
+    case 'deleteItem':
+      delete();
+      break;
+  }
+}
+
+function delete()
+{
+  require_once 'conexion.php';
+  $item = $_POST["itemsChecked"];
+  $consulta = "DELETE FROM usuarios WHERE id IN ($item)";
+  $result = mysqli_query($enlace, $consulta);
+  $response = [
+    "text" => "No se ha eliminado",
+    "status" => "error"
+  ];
+  if ($result == 1) {
+    $response = [
+      "text" => "Se ha eliminado correctamente",
+      "status" => "success"
+    ];
+  }
+  echo json_encode($response);
+}
 function data($search)
 {
   $consulta = "SELECT * FROM usuarios";
