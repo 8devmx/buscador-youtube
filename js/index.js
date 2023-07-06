@@ -1,8 +1,7 @@
 const selectedAll = document.querySelector("#selectedAll")
-const itemSelected = document.querySelectorAll(".itemSelected")
-const itemSelectedArray = Array.from(itemSelected)
 
 selectedAll.addEventListener("change", (event) => {
+  const itemSelected = document.querySelectorAll(".itemSelected")
   itemSelected.forEach((item) => {
     item.checked = false
   })
@@ -11,19 +10,11 @@ selectedAll.addEventListener("change", (event) => {
       item.checked = true
     })
   }
+  showDeleteIcon()
 })
 function isSelected (item) {
   return item.checked
 }
-itemSelected.forEach((item) => {
-  item.addEventListener("change", (event) => {
-    const someSelected = itemSelectedArray.some(isSelected)
-    deleteItem.style.display = "none"
-    if (someSelected) {
-      deleteItem.style.display = "inline-block"
-    }
-  })
-})
 
 deleteItem.addEventListener("click", (e) => {
   e.preventDefault()
@@ -31,6 +22,7 @@ deleteItem.addEventListener("click", (e) => {
   const confirmDelete = confirm("Deseas eliminar los registros seleccionados")
   if (confirmDelete) {
 
+    const itemSelectedArray = arrayItems()
     const itemsChecked = itemSelectedArray
       .filter(item => item.checked)
       .map(item => item.value)
@@ -72,6 +64,7 @@ const get_data = (search = "") => {
           <h2>${item.nombre}</h2>
           <h3>${item.correo}</h3>
           <p>${item.telefono}</p>
+          <a href="#" class="btnEdit">Editar</a>
         </div>
         `
       })
@@ -88,5 +81,25 @@ btnSearch.addEventListener('click', event => {
   get_data(search)
 })
 
+results.addEventListener('click', event => {
+  if (event.target.classList.contains('itemSelected')) {
+    showDeleteIcon()
+  }
+  if (event.target.classList.contains('btnEdit')) {
+    console.log('Quieres editar este elemento')
+  }
+})
 
+const arrayItems = () => {
+  const itemSelected = document.querySelectorAll(".itemSelected")
+  return Array.from(itemSelected)
+}
+const showDeleteIcon = () => {
+  const itemSelectedArray = arrayItems()
+  const someSelected = itemSelectedArray.some(isSelected)
+  deleteItem.style.display = "none"
+  if (someSelected) {
+    deleteItem.style.display = "inline-block"
+  }
+}
 get_data()
