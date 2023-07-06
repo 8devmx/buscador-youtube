@@ -11,65 +11,44 @@
 
 <body>
   <?php
-  $search = (isset($_GET['search'])) ? $_GET['search'] : "";
+  // $search = (isset($_GET['search'])) ? $_GET['search'] : "";
   ?>
   <div id="search">
     <form action="index.php">
-      <input type="text" name="search" value="<?php echo $search; ?>">
-      <input type="submit">
+      <input type="text" name="search" id="fieldSearch">
+      <input type="submit" id="btnSearch">
     </form>
   </div>
   <?php
-  require_once 'conexion.php';
-  require_once 'functions.php';
-  $query = data($search);
-  $result = mysqli_query($enlace, $query);
-  $pagination = pagination($result);
-  $pages = $pagination["pages"];
-  $paginationData = $pagination["data"];
-  $consulta =  $query . $paginationData;
-  $result = mysqli_query($enlace, $consulta);
-  $concatParams = ($search != "") ? "&search=" . $search : "";
+  // $pagination = pagination($result);
+  // $pages = $pagination["pages"];
+  // $paginationData = $pagination["data"];
+  // $consulta =  $query . $paginationData;
+  // $result = mysqli_query($enlace, $consulta);
+  // $concatParams = ($search != "") ? "&search=" . $search : "";
   ?>
-  <div id="pagination">
+  <!-- <div id="pagination">
     <ul>
       <?php
-      for ($i = 1; $i <= $pages; $i++) {
+      // for ($i = 1; $i <= $pages; $i++) {
       ?>
         <li>
-          <a href="index.php?page=<?php echo $i . $concatParams; ?>"><?php echo $i; ?></a>
+          <a href="index.php?page=<?php //echo $i . $concatParams; 
+                                  ?>"><?php //echo $i; 
+                                      ?></a>
         </li>
       <?php
-      }
+      // }
       ?>
     </ul>
-  </div>
+  </div> -->
   <div id="selectedAllWrapper">
     <span>
       <input type="checkbox" name="selectedAll" id="selectedAll" /> Seleccionar todo
     </span>
     <a href="#" id="deleteItem">Borrar</a>
   </div>
-  <div id="results">
-    <?php
-    $items = "";
-    while ($row = mysqli_fetch_array($result)) {
-      $id = $row['id'];
-      $nombre = $row['nombre'];
-      $correo = $row['correo'];
-      $telefono = $row['telefono'];
-      $items .= "
-        <div class='item'>
-        <input type='checkbox' value= '$id' class='itemSelected' />
-          <h2>$nombre</h2>
-          <h3>$correo</h3>
-          <p>$telefono</p>
-        </div>
-      ";
-    }
-    echo $items;
-    ?>
-  </div>
+  <div id="results"></div>
   <script src="js/index.js"></script>
 </body>
 

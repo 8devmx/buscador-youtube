@@ -47,9 +47,46 @@ deleteItem.addEventListener("click", (e) => {
         .then(json => {
           alert(json.text)
           if (json.status === "success") {
-            window.location.reload(true)
+            get_data()
           }
         })
     }
   }
 })
+
+const get_data = (search = "") => {
+  const form = new FormData();
+  form.append('function', 'data')
+  form.append('search', search)
+  fetch("functions.php", {
+    method: "POST",
+    body: form
+  })
+    .then(response => response.json())
+    .then(json => {
+      let template = ``
+      json.forEach(item => {
+        template += `
+        <div class='item'>
+          <input type='checkbox' value= '${item.id}' class='itemSelected' />
+          <h2>${item.nombre}</h2>
+          <h3>${item.correo}</h3>
+          <p>${item.telefono}</p>
+        </div>
+        `
+      })
+      results.innerHTML = template
+    })
+}
+btnSearch.addEventListener('click', event => {
+  event.preventDefault()
+  if (fieldSearch.value.length < 2) {
+    alert("Debes de escribir al menos 3 dígitos")
+    return false
+  }
+  const search = fieldSearch.value
+  get_data(search)
+})
+
+
+get_data()

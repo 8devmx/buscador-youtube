@@ -1,15 +1,20 @@
 <?php
+require_once 'conexion.php';
+global $enlace;
+
 if (isset($_POST)) {
   switch ($_POST['function']) {
     case 'deleteItem':
-      delete();
+      delete($enlace);
+      break;
+    case 'data':
+      data($_POST['search'], $enlace);
       break;
   }
 }
 
-function delete()
+function delete($enlace)
 {
-  require_once 'conexion.php';
   $item = $_POST["itemsChecked"];
   $consulta = "DELETE FROM usuarios WHERE id IN ($item)";
   $result = mysqli_query($enlace, $consulta);
@@ -25,17 +30,27 @@ function delete()
   }
   echo json_encode($response);
 }
-function data($search)
+function data($search, $enlace)
 {
   $consulta = "SELECT * FROM usuarios";
   $query = search($search, $consulta);
-  return $query;
+  $result = mysqli_query($enlace, $query);
+  $array = [];
+  while ($row = mysqli_fetch_array($result)) {
+    $array[] = [
+      "id" => $row['id'],
+      "nombre" => $row['nombre'],
+      "correo" => $row['correo'],
+      "telefono" => $row['telefono']
+    ];
+  }
+  echo json_encode($array);
 }
 
 function search($search, $consulta)
 {
   $filter = "";
-  if ($search && strlen($search) > 3) {
+  if ($search && strlen($search) > 1) {
     $filter = " WHERE nombre like '%$search%'";
     $consulta = $consulta . $filter;
   }
