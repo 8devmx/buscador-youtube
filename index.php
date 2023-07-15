@@ -10,38 +10,15 @@
 </head>
 
 <body>
-  <?php
-  // $search = (isset($_GET['search'])) ? $_GET['search'] : "";
-  ?>
   <div id="search">
     <form action="index.php">
       <input type="text" name="search" id="fieldSearch">
       <input type="submit" id="btnSearch">
     </form>
   </div>
-  <?php
-  // $pagination = pagination($result);
-  // $pages = $pagination["pages"];
-  // $paginationData = $pagination["data"];
-  // $consulta =  $query . $paginationData;
-  // $result = mysqli_query($enlace, $consulta);
-  // $concatParams = ($search != "") ? "&search=" . $search : "";
-  ?>
-  <!-- <div id="pagination">
-    <ul>
-      <?php
-      // for ($i = 1; $i <= $pages; $i++) {
-      ?>
-        <li>
-          <a href="index.php?page=<?php //echo $i . $concatParams; 
-                                  ?>"><?php //echo $i; 
-                                      ?></a>
-        </li>
-      <?php
-      // }
-      ?>
-    </ul>
-  </div> -->
+  <div>
+    <ul id="paginationWrapper"></ul>
+  </div>
   <div id="selectedAllWrapper">
     <span>
       <input type="checkbox" name="selectedAll" id="selectedAll" /> Seleccionar todo

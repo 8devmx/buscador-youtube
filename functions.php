@@ -8,7 +8,8 @@ if (isset($_POST)) {
       delete($enlace);
       break;
     case 'data':
-      data($_POST['search'], $enlace);
+      $page = isset($_POST['page']) ? $_POST['page'] : 1;
+      data($_POST['search'], $page, $enlace);
       break;
   }
 }
@@ -30,14 +31,23 @@ function delete($enlace)
   }
   echo json_encode($response);
 }
-function data($search, $enlace)
+function data($search, $page, $enlace)
 {
   $consulta = "SELECT * FROM usuarios";
   $query = search($search, $consulta);
   $result = mysqli_query($enlace, $query);
-  $array = [];
+  $pagination = pagination($result, $page);
+  $array = [
+    "attributes" => [
+      "total" => $pagination["total"],
+      "pages" => $pagination["pages"],
+      "page" => $pagination["page"]
+    ]
+  ];
+  $query = $query . $pagination["limit"];
+  $result = mysqli_query($enlace, $query);
   while ($row = mysqli_fetch_array($result)) {
-    $array[] = [
+    $array["data"][] = [
       "id" => $row['id'],
       "nombre" => $row['nombre'],
       "correo" => $row['correo'],
@@ -57,20 +67,17 @@ function search($search, $consulta)
   return $consulta;
 }
 
-function pagination($result)
+function pagination($result, $page = 1)
 {
   $total = $result->num_rows;
-  $limit = 10;
+  $limit = 5;
   $pages = ceil($total / $limit);
-  if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-  } else {
-    $page = 1;
-  }
   $start = ($page - 1) * $limit;
-  $pagination = " LIMIT $start, $limit";
+  $limit = " LIMIT $start, $limit";
   return [
+    "total" => $total,
     "pages" => $pages,
-    "data" => $pagination
+    "page" => $page,
+    "limit" => $limit
   ];
 }

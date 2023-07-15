@@ -46,10 +46,11 @@ deleteItem.addEventListener("click", (e) => {
   }
 })
 
-const get_data = (search = "") => {
+const get_data = (search = "", page = 1) => {
   const form = new FormData();
   form.append('function', 'data')
   form.append('search', search)
+  form.append('page', page)
   fetch("functions.php", {
     method: "POST",
     body: form
@@ -57,7 +58,7 @@ const get_data = (search = "") => {
     .then(response => response.json())
     .then(json => {
       let template = ``
-      json.forEach(item => {
+      json.data.forEach(item => {
         template += `
         <div class='item'>
           <input type='checkbox' value= '${item.id}' class='itemSelected' />
@@ -69,8 +70,28 @@ const get_data = (search = "") => {
         `
       })
       results.innerHTML = template
+      pagination(json.attributes)
     })
 }
+
+const pagination = attributes => {
+  let template = ''
+  for (let index = 1; index <= attributes.pages; index++) {
+    template += `
+    <li>
+      <a href="#" class="pages" data-page="${index}">${index}</a>
+    </li>
+    `
+  }
+  paginationWrapper.innerHTML = template
+}
+
+paginationWrapper.addEventListener("click", event => {
+  event.preventDefault()
+  if (event.target.classList.contains('pages')) {
+    get_data(fieldSearch.value, event.target.getAttribute("data-page"))
+  }
+})
 btnSearch.addEventListener('click', event => {
   event.preventDefault()
   if (fieldSearch.value.length < 2) {
